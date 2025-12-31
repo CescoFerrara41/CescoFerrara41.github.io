@@ -1,100 +1,352 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>2D Video Game | Francesco Ferrara</title>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <script>
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ["Inter", "system-ui", "sans-serif"]
-          }
-        }
-      }
-    };
-  </script>
-
+  <link rel="stylesheet" href="styles.css">
   <style>
-    html {
-      scroll-behavior: smooth;
+    /* Project-specific styles */
+    .project-page {
+      min-height: 100vh;
+    }
+
+    .project-header {
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border-color);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    
+    .project-main {
+      padding-top: 7rem;
+    }
+
+    .project-header nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .back-link:hover {
+      color: var(--accent-primary);
+    }
+
+    .back-arrow {
+      font-size: 1.1rem;
+    }
+
+    .project-badge {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .project-main {
+      padding-top: 7rem;
+      padding-bottom: 4rem;
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .project-title {
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-primary) 40%, var(--accent-primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .project-description {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 3rem;
+    }
+
+    .project-section {
+      margin-bottom: 3rem;
+    }
+
+    .project-section h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+
+    .project-section p {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .project-section ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .project-section ul li {
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: 0.75rem;
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .project-section ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.7rem;
+      width: 6px;
+      height: 6px;
+      background: var(--accent-primary);
+      border-radius: 50%;
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .tech-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .tech-card:hover {
+      border-color: var(--accent-primary);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .tech-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--accent-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .tech-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .back-to-projects {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.9rem 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-weight: 500;
+      font-size: 1rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .back-to-projects::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--accent-primary) 8%, transparent) 0%, color-mix(in srgb, var(--accent-primary) 3%, transparent) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .back-to-projects:hover::before {
+      opacity: 1;
+    }
+
+    .back-to-projects:hover {
+      border-color: var(--accent-primary);
+      color: var(--text-primary);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 0 0 1px var(--accent-primary);
+    }
+
+    .back-to-projects .back-arrow {
+      transition: transform 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .back-to-projects:hover .back-arrow {
+      transform: translateX(-4px);
+    }
+
+    .back-to-projects span:last-child {
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 799px) {
+      .project-main {
+        padding-top: 5rem;
+        padding-bottom: 2rem;
+      }
+
+      .project-title {
+        font-size: 1.75rem;
+      }
+
+      .project-description {
+        font-size: 1rem;
+      }
+
+      .tech-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
+<body class="project-page">
 
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
+  <!-- Fixed background with grid overlay -->
+  <div class="page-background"></div>
+  <div class="grid-overlay"></div>
 
-  <!-- Nav -->
-  <nav class="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-    <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
-      <a href="/" class="font-semibold hover:text-blue-600">← Home</a>
-      <span class="text-sm text-gray-500">Project</span>
+  <!-- Header -->
+  <header class="project-header">
+    <nav class="container">
+      <a href="/#projects" class="back-link">
+        <span class="back-arrow">←</span>
+        <span>Back to Projects</span>
+      </a>
+      <span class="project-badge">Project</span>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="project-main">
+    <div class="container" style="max-width: 800px;">
+      
+      <!-- Title & Description -->
+      <header style="margin-bottom: 4rem;">
+        <h1 class="project-title">2D Video Game Development</h1>
+        <p class="project-description">
+          A custom-built 2D game featuring enemy AI behavior, projectile systems, and polished gameplay mechanics developed from the ground up.
+        </p>
+      </header>
+
+      <!-- Overview -->
+      <section class="project-section">
+        <h2>Overview</h2>
+        <p>
+          This project is a 2D game developed entirely from scratch with a focus on creating responsive enemy behavior, engaging combat mechanics, and a scalable architecture for adding new content. The game demonstrates advanced AI patterns, complex collision systems, and smooth player controls.
+        </p>
+      </section>
+
+      <!-- Gameplay Systems -->
+      <section class="project-section">
+        <h2>Gameplay Systems</h2>
+        <ul>
+          <li>Enemy AI with dynamic movement patterns and adaptive attack phases</li>
+          <li>Robust projectile and collision detection systems</li>
+          <li>Responsive player movement and combat mechanics</li>
+          <li>Scene-based progression with state management</li>
+          <li>Health and damage calculation systems</li>
+          <li>Visual feedback and particle effects</li>
+        </ul>
+      </section>
+
+      <!-- Tech Stack -->
+      <section class="project-section">
+        <h2>Tech Stack</h2>
+        <div class="tech-grid">
+          <div class="tech-card">
+            <h3>Unity Engine</h3>
+            <p>2D game framework with physics and rendering</p>
+          </div>
+          <div class="tech-card">
+            <h3>C# Scripting</h3>
+            <p>Core gameplay logic and systems</p>
+          </div>
+          <div class="tech-card">
+            <h3>Custom AI</h3>
+            <p>Behavior trees and state machines</p>
+          </div>
+          <div class="tech-card">
+            <h3>Sprite Animation</h3>
+            <p>Frame-based character animations</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Technical Highlights -->
+      <section class="project-section">
+        <h2>Technical Highlights</h2>
+        <ul>
+          <li>Enemies dynamically adjust behavior based on player position and health</li>
+          <li>Shotgun-style projectile patterns with spread calculations</li>
+          <li>Modular, expandable architecture for new enemy types and abilities</li>
+          <li>Efficient object pooling for projectiles and effects</li>
+          <li>Persistent state management across scenes</li>
+          <li>Performance optimization for smooth 60 FPS gameplay</li>
+        </ul>
+      </section>
+
+      <!-- Challenges & Solutions -->
+      <section class="project-section">
+        <h2>Challenges & Solutions</h2>
+        <p>
+          One of the main challenges was creating AI that felt challenging but fair. I solved this by implementing multiple difficulty phases that gradually introduce new attack patterns, giving players time to learn and adapt. The projectile system required careful optimization to handle dozens of simultaneous projectiles without performance drops, which I achieved through object pooling and efficient collision detection.
+        </p>
+      </section>
+
     </div>
-  </nav>
-
-  <!-- Content -->
-  <main class="max-w-3xl mx-auto px-6 py-20 space-y-16">
-
-    <!-- Header -->
-    <header class="space-y-4">
-      <h1 class="text-4xl font-bold">2D Video Game Development</h1>
-      <p class="text-gray-600 dark:text-gray-400">
-        A 2D game project focused on enemy AI behavior, projectile systems, and gameplay polish.
-      </p>
-    </header>
-
-    <!-- Overview -->
-    <section class="space-y-4">
-      <h2 class="text-2xl font-semibold">Overview</h2>
-      <p class="text-gray-600 dark:text-gray-400">
-        This project is a custom-built 2D game developed from the ground up. The primary focus was
-        on implementing responsive enemy behavior, engaging combat mechanics, and a scalable
-        architecture for adding new content.
-      </p>
-    </section>
-
-    <!-- Gameplay Systems -->
-    <section class="space-y-4">
-      <h2 class="text-2xl font-semibold">Gameplay Systems</h2>
-      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400">
-        <li>Enemy AI with movement patterns and attack phases</li>
-        <li>Projectile and collision systems</li>
-        <li>Player movement and combat mechanics</li>
-        <li>Scene-based progression</li>
-      </ul>
-    </section>
-
-    <!-- Tech Stack -->
-    <section class="space-y-4">
-      <h2 class="text-2xl font-semibold">Tech Stack</h2>
-      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400">
-        <li>Unity (2D)</li>
-        <li>C# scripting</li>
-        <li>Custom enemy behaviors</li>
-        <li>Sprite-based animation</li>
-      </ul>
-    </section>
-
-    <!-- Highlights -->
-    <section class="space-y-4">
-      <h2 class="text-2xl font-semibold">Highlights</h2>
-      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400">
-        <li>Enemies dynamically adjust behavior based on player position</li>
-        <li>Shotgun-style projectile patterns</li>
-        <li>Expandable architecture for new enemy types</li>
-      </ul>
-    </section>
-
   </main>
 
   <!-- Footer -->
-  <footer class="text-center py-8 text-gray-500 dark:text-gray-400">
-    © 2025 Francesco Ferrara
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <p>© 2025 Francesco Ferrara</p>
+      </div>
+    </div>
   </footer>
 
 </body>

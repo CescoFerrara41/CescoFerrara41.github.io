@@ -1,108 +1,395 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Music Data Analysis | Francesco Ferrara</title>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <script>
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ["Inter", "system-ui", "sans-serif"]
-          }
-        }
-      }
-    };
-  </script>
-
+  <link rel="stylesheet" href="styles.css">
   <style>
-    html {
-      scroll-behavior: smooth;
+    /* Project-specific styles */
+    .project-page {
+      min-height: 100vh;
+    }
+
+    .project-header {
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border-color);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    
+    .project-main {
+      padding-top: 7rem;
+    }
+
+    .project-header nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .back-link:hover {
+      color: var(--accent-primary);
+    }
+
+    .back-arrow {
+      font-size: 1.1rem;
+    }
+
+    .project-badge {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .project-main {
+      padding-top: 7rem;
+      padding-bottom: 4rem;
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .project-title {
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-primary) 40%, var(--accent-primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .project-description {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 3rem;
+    }
+
+    .project-section {
+      margin-bottom: 3rem;
+    }
+
+    .project-section h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+
+    .project-section p {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .project-section ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .project-section ul li {
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: 0.75rem;
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .project-section ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.7rem;
+      width: 6px;
+      height: 6px;
+      background: var(--accent-primary);
+      border-radius: 50%;
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      margin-bottom: 1rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .video-caption {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .tech-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .tech-card:hover {
+      border-color: var(--accent-primary);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .tech-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--accent-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .tech-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .back-to-projects {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.9rem 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-weight: 500;
+      font-size: 1rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .back-to-projects::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--accent-primary) 8%, transparent) 0%, color-mix(in srgb, var(--accent-primary) 3%, transparent) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .back-to-projects:hover::before {
+      opacity: 1;
+    }
+
+    .back-to-projects:hover {
+      border-color: var(--accent-primary);
+      color: var(--text-primary);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 0 0 1px var(--accent-primary);
+    }
+
+    .back-to-projects .back-arrow {
+      transition: transform 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .back-to-projects:hover .back-arrow {
+      transform: translateX(-4px);
+    }
+
+    .back-to-projects span:last-child {
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 799px) {
+      .project-main {
+        padding-top: 5rem;
+        padding-bottom: 2rem;
+      }
+
+      .project-title {
+        font-size: 1.75rem;
+      }
+
+      .project-description {
+        font-size: 1rem;
+      }
+
+      .tech-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
+<body class="project-page">
 
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
+  <!-- Fixed background with grid overlay -->
+  <div class="page-background"></div>
+  <div class="grid-overlay"></div>
 
-  <!-- Simple Nav -->
-  <nav class="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-    <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
-      <a href="/" class="font-semibold hover:text-blue-600">← Home</a>
-      <span class="text-sm text-gray-500">Project</span>
+  <!-- Header -->
+  <header class="project-header">
+    <nav class="container">
+      <a href="/#projects" class="back-link">
+        <span class="back-arrow">←</span>
+        <span>Back to Projects</span>
+      </a>
+      <span class="project-badge">Project</span>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="project-main">
+    <div class="container" style="max-width: 800px;">
+      
+      <!-- Title & Description -->
+      <header style="margin-bottom: 4rem;">
+        <h1 class="project-title">Music Data Analysis</h1>
+        <p class="project-description">
+          A comprehensive data-driven exploration of trends, patterns, and insights across large-scale music datasets, revealing correlations between audio features, genre popularity, and listener engagement.
+        </p>
+      </header>
+
+      <!-- Video Walkthrough -->
+      <section class="project-section">
+        <h2>Project Walkthrough</h2>
+        <div class="video-container">
+          <iframe
+            src="https://drive.google.com/file/d/1FhB_Q0th3nNEmTzehVqmmIOexPP6B7ph/preview"
+            allow="autoplay"
+            frameborder="0"
+          ></iframe>
+        </div>
+        <p class="video-caption">
+          Short walkthrough demonstrating the analysis process, visualizations, and key insights derived from the data.
+        </p>
+      </section>
+
+      <!-- Overview -->
+      <section class="project-section">
+        <h2>Overview</h2>
+        <p>
+          This project analyzes a large collection of music-related data to uncover trends in genre popularity, artist behavior, and listener preferences. Using exploratory data analysis and advanced visualization techniques, the project extracts meaningful insights from complex datasets, revealing patterns that inform understanding of the modern music landscape.
+        </p>
+      </section>
+
+      <!-- Tech Stack -->
+      <section class="project-section">
+        <h2>Tech Stack</h2>
+        <div class="tech-grid">
+          <div class="tech-card">
+            <h3>Python</h3>
+            <p>Pandas & NumPy for data manipulation</p>
+          </div>
+          <div class="tech-card">
+            <h3>Visualization</h3>
+            <p>Matplotlib & Seaborn libraries</p>
+          </div>
+          <div class="tech-card">
+            <h3>Jupyter</h3>
+            <p>Interactive notebook environment</p>
+          </div>
+          <div class="tech-card">
+            <h3>Data Sources</h3>
+            <p>CSV-based music datasets</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Analysis Methods -->
+      <section class="project-section">
+        <h2>Analysis Methods</h2>
+        <ul>
+          <li>Statistical analysis of audio features and their correlations</li>
+          <li>Time-series analysis of genre popularity trends</li>
+          <li>Distribution analysis of song characteristics</li>
+          <li>Comparative analysis across different musical eras</li>
+          <li>Pattern recognition in artist release strategies</li>
+        </ul>
+      </section>
+
+      <!-- Key Insights -->
+      <section class="project-section">
+        <h2>Key Insights</h2>
+        <ul>
+          <li>Identified long-term genre popularity trends and emerging patterns</li>
+          <li>Discovered strong correlations between specific audio features and song success metrics</li>
+          <li>Analyzed artist release cadence and its impact on listener engagement</li>
+          <li>Revealed temporal patterns in music consumption behavior</li>
+          <li>Uncovered relationships between track length, tempo, and audience retention</li>
+        </ul>
+      </section>
+
+      <!-- Technical Highlights -->
+      <section class="project-section">
+        <h2>Technical Highlights</h2>
+        <ul>
+          <li>Efficient handling and processing of large-scale datasets (100k+ records)</li>
+          <li>Custom visualization functions for multi-dimensional data exploration</li>
+          <li>Statistical validation of observed patterns and correlations</li>
+          <li>Clean data pipeline from raw CSV to actionable insights</li>
+          <li>Reproducible analysis workflow with detailed documentation</li>
+        </ul>
+      </section>
+
     </div>
-  </nav>
-
-  <!-- Content -->
-  <main class="max-w-3xl mx-auto px-6 py-20 space-y-16">
-
-    <!-- Header -->
-    <header class="space-y-4">
-      <h1 class="text-4xl font-bold">Music Data Analysis</h1>
-      <p class="text-gray-600 dark:text-gray-400">
-        A data-driven exploration of trends, patterns, and insights across large-scale music datasets.
-      </p>
-    </header>
-
-    <!-- Video Embed -->
-    <section class="space-y-4">
-      <h2 class="text-2xl font-semibold">Project Walkthrough</h2>
-
-      <div class="relative w-full aspect-video rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700">
-        <iframe
-          src="https://drive.google.com/file/d/1FhB_Q0th3nNEmTzehVqmmIOexPP6B7ph/preview"
-          allow="autoplay"
-          class="absolute inset-0 w-full h-full"
-        ></iframe>
-      </div>
-
-      <p class="text-sm text-gray-500">
-        Short walkthrough demonstrating the analysis, visualizations, and insights.
-      </p>
-    </section>
-
-    <!-- Overview -->
-    <section class="space-y-4">
-      <h2 class="text-2xl font-semibold">Overview</h2>
-      <p class="text-gray-600 dark:text-gray-400">
-        This project analyzes a large collection of music-related data to uncover trends in genre popularity,
-        artist behavior, and listener preferences. The goal was to extract meaningful insights using
-        exploratory data analysis and visualization techniques.
-      </p>
-    </section>
-
-    <!-- Tech Stack -->
-    <section class="space-y-4">
-      <h2 class="text-2xl font-semibold">Tech Stack</h2>
-      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400">
-        <li>Python (Pandas, NumPy)</li>
-        <li>Matplotlib / Seaborn</li>
-        <li>Jupyter Notebook</li>
-        <li>CSV-based datasets</li>
-      </ul>
-    </section>
-
-    <!-- Key Insights -->
-    <section class="space-y-4">
-      <h2 class="text-2xl font-semibold">Key Insights</h2>
-      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400">
-        <li>Identified long-term genre popularity trends</li>
-        <li>Observed correlations between audio features and song success</li>
-        <li>Analyzed artist release cadence and listener engagement</li>
-      </ul>
-    </section>
-
-
-
   </main>
 
   <!-- Footer -->
-  <footer class="text-center py-8 text-gray-500 dark:text-gray-400">
-    © 2025 Francesco Ferrara
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <p>© 2025 Francesco Ferrara</p>
+      </div>
+    </div>
   </footer>
 
 </body>
