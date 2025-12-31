@@ -83,7 +83,7 @@ body {
 }
 
 /* Header */
-header {
+.home header {
   position: fixed;
   top: 0;
   left: 0;
@@ -98,7 +98,7 @@ header {
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-header.visible {
+.home header.visible {
   transform: translateY(0);
   opacity: 1;
 }
