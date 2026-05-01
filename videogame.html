@@ -11,6 +11,33 @@
       min-height: 100vh;
     }
 
+    .download-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2.25rem;
+  background: linear-gradient(135deg, var(--accent-primary), color-mix(in srgb, var(--accent-primary) 70%, black));
+  border: none;
+  border-radius: var(--radius-md);
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+.download-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+.download-note {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
     .project-header {
       background: var(--bg-header);
       border-bottom: 1px solid var(--border-color);
@@ -279,6 +306,13 @@
           This project is a 2D game developed entirely from scratch with a focus on creating responsive enemy behavior, engaging combat mechanics, and a scalable architecture for adding new content. The game demonstrates advanced AI patterns, complex collision systems, and smooth player controls.
         </p>
       </section>
+
+      <div style="margin-top: 2rem;">
+        <a href="downloads/my-game.zip" class="download-button" download>
+          ⬇ Download Game (Windows Only)
+        </a>
+        <p class="download-note">*This build is currently available for Windows only.</p>
+      </div>
 
       <!-- Gameplay Systems -->
       <section class="project-section">
