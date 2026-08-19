@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VNL Stats Database | Francesco Ferrara</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Project-specific styles */
+    .project-page {
+      min-height: 100vh;
+    }
+
+    .project-header {
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border-color);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .project-header nav {
+      display: flex;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .back-link:hover {
+      color: var(--text-primary);
+      background: var(--bg-card);
+    }
+
+    .back-arrow {
+      font-size: 1.1rem;
+      transition: transform 0.3s ease;
+    }
+
+    .back-link:hover .back-arrow {
+      transform: translateX(-3px);
+    }
+
+    .project-main {
+      padding-top: 7rem;
+      padding-bottom: 4rem;
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .project-title {
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-primary) 40%, var(--accent-primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .project-description {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .project-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .view-project-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.9rem 2rem;
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+      border: none;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .view-project-btn:hover {
+      background: #3b82f6;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(96, 165, 250, 0.3);
+    }
+
+    .view-project-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .view-source-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.9rem 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .view-source-btn:hover {
+      color: var(--text-primary);
+      border-color: var(--accent-primary);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .view-source-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .project-section {
+      margin-bottom: 3rem;
+    }
+
+    .project-section h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+
+    .project-section p {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .project-section ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .project-section ul li {
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: 0.75rem;
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .project-section ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.7rem;
+      width: 6px;
+      height: 6px;
+      background: var(--accent-primary);
+      border-radius: 50%;
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .tech-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .tech-card:hover {
+      border-color: var(--accent-primary);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .tech-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--accent-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .tech-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 799px) {
+      .project-main {
+        padding-top: 5rem;
+        padding-bottom: 2rem;
+      }
+
+      .project-title {
+        font-size: 1.75rem;
+      }
+
+      .project-description {
+        font-size: 1rem;
+      }
+
+      .tech-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body class="project-page">
+
+  <!-- Fixed background with grid overlay -->
+  <div class="page-background"></div>
+  <div class="grid-overlay"></div>
+
+  <!-- Header -->
+  <header class="project-header">
+    <nav class="container">
+      <a href="/" class="back-link">
+        <span class="back-arrow">←</span>
+        <span>Francesco Ferrara</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="project-main">
+    <div class="container" style="max-width: 800px;">
+
+      <!-- Title & Description -->
+      <header style="margin-bottom: 2rem;">
+        <h1 class="project-title">VNL Stats Database</h1>
+        <p class="project-description">
+          A historical database and browsable archive for Volleyball Nations League tournaments, built on an automated pipeline that syncs match and player data every day.
+        </p>
+        <div class="project-buttons">
+          <a href="https://cescoferrara41.github.io/volleyball-database/" target="_blank" rel="noopener noreferrer" class="view-project-btn">
+            <span>View Live Project</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+          </a>
+          <a href="https://github.com/CescoFerrara41/volleyball-database" target="_blank" rel="noopener noreferrer" class="view-source-btn">
+            <span>View Source</span>
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+          </a>
+        </div>
+      </header>
+
+      <!-- Overview -->
+      <section class="project-section">
+        <h2>Overview</h2>
+        <p>
+          VNL Stats is a data pipeline and archive for Volleyball Nations League tournaments. Instead of scraping the FIVB website directly, it pulls structured results from FIVB's public VIS web service, layering in player-level statistics scraped from volleyballworld.com and live current-season stats from 365scores. Everything lands in a Postgres database and is served through a lightweight, filterable static archive page.
+        </p>
+      </section>
+
+      <!-- Key Features -->
+      <section class="project-section">
+        <h2>Key Features</h2>
+        <ul>
+          <li>Automated daily synchronization of tournament and match data via scheduled GitHub Actions</li>
+          <li>Idempotent upserts with version tracking to keep the database consistent without duplicate records</li>
+          <li>Historical player statistics scraped from volleyballworld.com across past seasons</li>
+          <li>Live current-season player stats pulled from the 365scores API</li>
+          <li>Browsable archive filterable by season and gender</li>
+        </ul>
+      </section>
+
+      <!-- Tech Stack -->
+      <section class="project-section">
+        <h2>Tech Stack</h2>
+        <div class="tech-grid">
+          <div class="tech-card">
+            <h3>Python + Playwright</h3>
+            <p>Data collection and browser automation</p>
+          </div>
+          <div class="tech-card">
+            <h3>PostgreSQL / Supabase</h3>
+            <p>Hosted database with row-level security</p>
+          </div>
+          <div class="tech-card">
+            <h3>Vanilla JavaScript</h3>
+            <p>Frontend reading live Supabase data</p>
+          </div>
+          <div class="tech-card">
+            <h3>GitHub Actions</h3>
+            <p>Scheduled daily data sync jobs</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Technical Highlights -->
+      <section class="project-section">
+        <h2>Technical Highlights</h2>
+        <ul>
+          <li>Uses FIVB's structured VIS web service instead of fragile HTML scraping for core match data</li>
+          <li>Merges multiple heterogeneous data sources (VIS, volleyballworld.com, 365scores) into one consistent schema</li>
+          <li>Read-only public access enforced through Supabase row-level security policies</li>
+          <li>Fully static frontend with no backend server to maintain, deployed via GitHub Pages</li>
+        </ul>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <p>© 2025 Francesco Ferrara</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
